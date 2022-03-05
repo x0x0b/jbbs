@@ -1,0 +1,42 @@
+{
+  "family": "jbbs-task",
+  "networkMode": "awsvpc",
+  "containerDefinitions": [
+    {
+      "name": "jbbs-container",
+      "image": "jbbs",
+      "portMappings": [
+        {
+          "containerPort": 8080,
+          "hostPort": 8080,
+          "protocol": "tcp"
+        }
+      ],
+      "essential": true,
+      "secrets": [
+        {
+          "name": "MYSQL_HOST",
+          "valueFrom": "arn:aws:ssm:ap-northeast-1:TARGET_AWS_ACCOUNT_ID:parameter/jbbs/db_host"
+        },
+        {
+          "name": "MYSQL_USER",
+          "valueFrom": "arn:aws:ssm:ap-northeast-1:TARGET_AWS_ACCOUNT_ID:parameter/jbbs/db_username"
+        },
+        {
+          "name": "MYSQL_PASSWORD",
+          "valueFrom": "arn:aws:ssm:ap-northeast-1:TARGET_AWS_ACCOUNT_ID:parameter/jbbs/db_password"
+        }
+      ]
+    }
+  ],
+  "runtimePlatform": {
+    "cpuArchitecture": "X86_64",
+    "operatingSystemFamily": "LINUX"
+  },
+  "requiresCompatibilities": [
+    "FARGATE"
+  ],
+  "executionRoleArn": "ecsTaskExecutionRole",
+  "cpu": "256",
+  "memory": "512"
+}
